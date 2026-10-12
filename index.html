@@ -1,0 +1,1052 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="经纬智星：面向虎峪校区地球科学与测绘工程学院学生的 AI 学习与实践组织。">
+  <title>经纬智星｜AI 学习与实践共同体</title>
+  <style>
+    :root {
+      --bg: #050914;
+      --bg-soft: #091226;
+      --panel: rgba(13, 24, 48, .78);
+      --panel-strong: #0e1a34;
+      --line: rgba(126, 190, 255, .22);
+      --line-bright: rgba(126, 190, 255, .52);
+      --text: #eff7ff;
+      --muted: #a8bad1;
+      --cyan: #61e6ff;
+      --blue: #6d8dff;
+      --violet: #b989ff;
+      --amber: #ffc56d;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 78% 8%, rgba(73, 106, 255, .18), transparent 28rem),
+        radial-gradient(circle at 12% 32%, rgba(0, 215, 255, .09), transparent 25rem),
+        var(--bg);
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", system-ui, sans-serif;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .27;
+      background-image:
+        linear-gradient(rgba(122, 190, 255, .04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(122, 190, 255, .04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(to bottom, black, transparent 86%);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .wrap { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
+    .topbar {
+      position: fixed;
+      z-index: 10;
+      top: 0;
+      left: 0;
+      width: 100%;
+      border-bottom: 1px solid rgba(133, 193, 255, .14);
+      background: rgba(5, 9, 20, .7);
+      backdrop-filter: blur(18px);
+    }
+    .scroll-progress { position: absolute; left: 0; bottom: -1px; width: 100%; height: 2px; transform-origin: left center; transform: scaleX(0); background: linear-gradient(90deg, var(--cyan), var(--violet), var(--amber)); box-shadow: 0 0 14px rgba(97, 230, 255, .85); }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 70px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: .08em; }
+    .brand-mark {
+      position: relative;
+      width: 30px;
+      height: 30px;
+      border: 1px solid var(--cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(97, 230, 255, .45);
+    }
+    .brand-mark::before, .brand-mark::after {
+      content: "";
+      position: absolute;
+      inset: 6px -5px;
+      border: 1px solid var(--cyan);
+      border-radius: 50%;
+      transform: rotate(32deg);
+    }
+    .brand-mark::after { transform: rotate(-32deg); border-color: var(--violet); }
+    .nav-links { display: flex; gap: 26px; color: var(--muted); font-size: 14px; }
+    .nav-links a { transition: color .2s ease; }
+    .nav-links a:hover, .nav-links a:focus-visible { color: var(--cyan); }
+    .nav-links a.is-active { color: var(--cyan); text-shadow: 0 0 12px rgba(97, 230, 255, .52); }
+    .nav-links a:focus-visible, .brand:focus-visible, .hero-link:focus-visible, .loop-item:focus-visible, .stage:focus-visible { outline: 2px solid var(--amber); outline-offset: 5px; }
+
+    .hero { position: relative; min-height: 760px; display: grid; align-items: center; padding: 150px 0 92px; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr); gap: 56px; align-items: center; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 12px;
+      border: 1px solid var(--line-bright);
+      border-radius: 999px;
+      color: var(--cyan);
+      background: rgba(25, 66, 114, .18);
+      font-size: 13px;
+      letter-spacing: .08em;
+    }
+    .eyebrow i { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 12px var(--cyan); }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 720px; margin: 25px 0 20px; font-size: clamp(42px, 7vw, 82px); line-height: 1.07; letter-spacing: -.055em; }
+    h1 span { color: var(--cyan); text-shadow: 0 0 28px rgba(97, 230, 255, .32); }
+    .hero-copy { max-width: 620px; color: var(--muted); font-size: 18px; }
+    .hero-tagline { margin: 32px 0 0; color: var(--text); font-size: 16px; letter-spacing: .08em; }
+    .hero-tagline strong { color: var(--amber); font-weight: 600; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 30px; }
+    .hero-link { display: inline-flex; align-items: center; gap: 10px; min-height: 46px; padding: 0 17px; border: 1px solid var(--line-bright); color: var(--text); background: rgba(28, 58, 107, .42); font-size: 14px; cursor: pointer; transition: transform .22s ease, background .22s ease, border-color .22s ease, box-shadow .22s ease; }
+    .hero-link::after { content: "↘"; color: var(--cyan); transition: transform .22s ease; }
+    .hero-link:hover { transform: translateY(-2px); border-color: var(--cyan); background: rgba(44, 93, 156, .55); box-shadow: 0 10px 26px rgba(52, 149, 255, .16); }
+    .hero-link:hover::after { transform: translate(3px, 3px); }
+    .hero-visual { position: relative; min-height: 440px; display: grid; place-items: center; }
+    .orbit {
+      position: relative;
+      width: min(430px, 84vw);
+      aspect-ratio: 1;
+      border: 1px solid rgba(113, 198, 255, .45);
+      border-radius: 50%;
+      transform: rotate(-21deg);
+      box-shadow: inset 0 0 70px rgba(53, 117, 255, .08), 0 0 50px rgba(53, 160, 255, .12);
+    }
+    .orbit::before, .orbit::after { content: ""; position: absolute; inset: 12%; border: 1px solid rgba(166, 125, 255, .44); border-radius: 50%; }
+    .orbit::after { inset: 28%; border-color: rgba(97, 230, 255, .5); }
+    .orbit-ring { position: absolute; inset: 22% -5%; border: 1px solid rgba(97, 230, 255, .4); border-radius: 50%; transform: rotate(55deg); }
+    .orbit-core { position: absolute; inset: 39%; border: 1px solid var(--cyan); border-radius: 50%; background: radial-gradient(circle, rgba(97, 230, 255, .55), rgba(49, 72, 171, .22) 35%, transparent 72%); box-shadow: 0 0 50px rgba(97, 230, 255, .6); }
+    .orbit-node { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 18px var(--amber); }
+    .node-a { top: 8%; left: 48%; } .node-b { bottom: 17%; right: 4%; background: var(--violet); box-shadow: 0 0 18px var(--violet); } .node-c { top: 39%; left: 2%; }
+    .visual-label { position: absolute; right: 3%; bottom: 9%; padding: 12px 14px; border-left: 2px solid var(--cyan); color: var(--muted); background: rgba(8, 18, 39, .72); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 11px; letter-spacing: .08em; }
+    .visual-label b { display: block; color: var(--cyan); font-size: 13px; }
+    .cursor-glow { position: fixed; z-index: 0; width: 260px; height: 260px; pointer-events: none; border-radius: 50%; background: radial-gradient(circle, rgba(97, 230, 255, .08), transparent 68%); transform: translate(-50%, -50%); mix-blend-mode: screen; opacity: 0; transition: opacity .35s ease; }
+
+    section { padding: 100px 0; }
+    .section-head { max-width: 710px; margin-bottom: 38px; }
+    .kicker { margin-bottom: 12px; color: var(--cyan); font-size: 13px; letter-spacing: .18em; text-transform: uppercase; }
+    h2 { margin-bottom: 14px; font-size: clamp(30px, 4vw, 50px); line-height: 1.13; letter-spacing: -.035em; }
+    .section-head p { margin-bottom: 0; color: var(--muted); font-size: 16px; }
+    .panel { border: 1px solid var(--line); background: linear-gradient(135deg, rgba(19, 34, 68, .78), rgba(7, 15, 33, .82)); box-shadow: 0 20px 80px rgba(0, 0, 0, .18); }
+    .intro-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 18px; }
+    .intro-main { padding: 34px; min-height: 280px; }
+    .intro-main p { color: var(--muted); font-size: 17px; max-width: 720px; }
+    .signal-list { display: grid; gap: 12px; padding: 30px; }
+    .signal { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--line); }
+    .signal:last-child { border-bottom: 0; }
+    .signal-num { flex: 0 0 auto; color: var(--cyan); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .signal b { display: block; margin-bottom: 3px; }
+    .signal span { color: var(--muted); font-size: 14px; }
+
+    .loop { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+    .loop-item { position: relative; min-height: 150px; padding: 22px 16px; border: 1px solid var(--line); background: rgba(11, 24, 50, .72); color: var(--text); text-align: left; font: inherit; cursor: pointer; transition: transform .22s ease, border-color .22s ease, background .22s ease, box-shadow .22s ease; }
+    .loop-item:hover, .loop-item.is-selected { transform: translateY(-5px); border-color: var(--cyan); background: linear-gradient(145deg, rgba(28, 67, 112, .82), rgba(11, 24, 50, .82)); box-shadow: 0 15px 30px rgba(26, 122, 208, .14), inset 0 0 22px rgba(97, 230, 255, .05); }
+    .loop-item::after { content: "→"; position: absolute; top: 50%; right: -16px; color: var(--cyan); transform: translateY(-50%); font-size: 20px; }
+    .loop-item:last-child::after { display: none; }
+    .loop-index { color: var(--cyan); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 12px; }
+    .loop-item b { display: block; margin: 20px 0 6px; }
+    .loop-item span { color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .loop-status { min-height: 48px; margin-top: 18px; padding: 13px 16px; border-left: 2px solid var(--cyan); color: var(--muted); background: rgba(10, 24, 48, .72); font-size: 14px; transition: opacity .2s ease, transform .2s ease; }
+    .loop-status b { color: var(--cyan); }
+
+    .roadmap { display: grid; gap: 0; position: relative; }
+    .roadmap::before { content: ""; position: absolute; top: 0; bottom: 0; left: 22px; width: 1px; background: linear-gradient(var(--cyan), rgba(185, 137, 255, .35), transparent); }
+    .stage { position: relative; display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; gap: 22px; align-items: start; padding: 0 0 34px; cursor: pointer; transition: transform .22s ease; }
+    .stage:hover { transform: translateX(5px); }
+    .stage:last-child { padding-bottom: 0; }
+    .stage-dot { z-index: 1; width: 45px; height: 45px; display: grid; place-items: center; border: 1px solid var(--cyan); border-radius: 50%; background: var(--bg); color: var(--cyan); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 12px; box-shadow: 0 0 22px rgba(97, 230, 255, .2); }
+    .stage h3 { margin: 5px 0 7px; font-size: 21px; }
+    .stage p { margin: 0; color: var(--muted); }
+    .stage-note { align-self: center; padding: 6px 10px; border: 1px solid rgba(255, 197, 109, .42); color: var(--amber); font-size: 12px; white-space: nowrap; }
+    .stage-detail { grid-column: 2 / -1; max-height: 0; overflow: hidden; opacity: 0; padding: 0 15px; border-left: 1px solid var(--line); color: var(--muted); font-size: 14px; transform: translateY(-5px); transition: max-height .3s ease, opacity .25s ease, transform .3s ease, padding .3s ease; }
+    .stage.is-open .stage-detail { max-height: 120px; opacity: 1; padding: 12px 15px; transform: translateY(0); }
+    .stage.is-open .stage-dot { background: rgba(97, 230, 255, .14); box-shadow: 0 0 26px rgba(97, 230, 255, .55); }
+    .stage.is-open .stage-note { border-color: var(--cyan); color: var(--cyan); }
+    .orbit-console { position: relative; min-height: 760px; display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 24px; align-items: center; padding: 30px 0 12px; }
+    .constellation { position: relative; min-height: 680px; display: grid; place-items: center; overflow: hidden; border: 1px solid rgba(126, 190, 255, .16); background: radial-gradient(circle at 50% 50%, rgba(26, 72, 128, .2), transparent 46%), linear-gradient(135deg, rgba(13, 28, 58, .66), rgba(4, 11, 26, .82)); box-shadow: inset 0 0 80px rgba(69, 127, 255, .08); }
+    .constellation::before { content: ""; position: absolute; inset: 0; opacity: .42; background-image: linear-gradient(rgba(108, 179, 255, .07) 1px, transparent 1px), linear-gradient(90deg, rgba(108, 179, 255, .07) 1px, transparent 1px); background-size: 40px 40px; mask-image: radial-gradient(circle, black, transparent 78%); }
+    .constellation::after { content: "SYSTEM / AI LEARNING ORBIT"; position: absolute; top: 18px; left: 20px; color: rgba(173, 216, 255, .6); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px; letter-spacing: .17em; }
+    .orbit-stage { --rotation: 0deg; position: relative; z-index: 1; width: min(670px, 94%); aspect-ratio: 1; touch-action: none; cursor: grab; transform: rotate(var(--rotation)); transition: transform .55s cubic-bezier(.2,.8,.2,1); }
+    .orbit-stage.auto-spin { transition: none; }
+    .orbit-stage.is-dragging { cursor: grabbing; transition: none; }
+    .orbit-track { position: absolute; inset: 10%; border: 1px solid rgba(97, 230, 255, .28); border-radius: 50%; box-shadow: 0 0 40px rgba(97, 230, 255, .08), inset 0 0 40px rgba(185, 137, 255, .05); }
+    .orbit-track::before, .orbit-track::after { content: ""; position: absolute; inset: 12%; border: 1px dashed rgba(185, 137, 255, .3); border-radius: 50%; }
+    .orbit-track::after { inset: 24%; border-style: solid; border-color: rgba(97, 230, 255, .2); }
+    .planet { position: absolute; inset: 30%; display: grid; place-items: center; border: 1px solid var(--cyan); border-radius: 50%; background: radial-gradient(circle at 32% 28%, rgba(161, 245, 255, .6), transparent 18%), radial-gradient(circle at 65% 66%, rgba(142, 98, 255, .65), transparent 35%), linear-gradient(145deg, #153a68, #091228 70%); box-shadow: 0 0 34px rgba(97, 230, 255, .65), 0 0 100px rgba(75, 93, 255, .22), inset -16px -20px 34px rgba(0, 0, 0, .42); transform: rotate(calc(var(--rotation) * -1)); transition: transform .55s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease; }
+    .planet::before { content: ""; position: absolute; inset: 12%; border: 1px solid rgba(132, 227, 255, .48); border-left-color: transparent; border-right-color: transparent; border-radius: 50%; transform: rotate(-24deg); }
+    .planet::after { content: ""; position: absolute; inset: 28% -11%; border: 1px solid rgba(255, 197, 109, .56); border-radius: 50%; transform: rotate(-28deg); }
+    .planet-core { position: relative; z-index: 1; text-align: center; }
+    .planet-core b { display: block; color: var(--cyan); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: clamp(24px, 4vw, 40px); letter-spacing: .08em; }
+    .planet-core span { color: rgba(239, 247, 255, .75); font-size: 13px; letter-spacing: .15em; }
+    .orbit-node-btn { position: absolute; left: 50%; top: 50%; width: 138px; min-height: 68px; padding: 10px 12px; border: 1px solid rgba(121, 193, 255, .45); border-radius: 3px; color: var(--muted); background: rgba(6, 17, 38, .88); text-align: center; font: inherit; font-size: 15px; cursor: pointer; transform: translate(-50%, -50%) rotate(calc(var(--rotation) * -1)) translateY(-280px) rotate(calc(var(--rotation) * 1)); transition: color .22s ease, border-color .22s ease, background .22s ease, box-shadow .22s ease, transform .55s cubic-bezier(.2,.8,.2,1); }
+    .orbit-node-btn:nth-of-type(1) { --angle: 0deg; }
+    .orbit-node-btn:nth-of-type(2) { --angle: 40deg; }
+    .orbit-node-btn:nth-of-type(3) { --angle: 80deg; }
+    .orbit-node-btn:nth-of-type(4) { --angle: 120deg; }
+    .orbit-node-btn:nth-of-type(5) { --angle: 160deg; }
+    .orbit-node-btn:nth-of-type(6) { --angle: 200deg; }
+    .orbit-node-btn:nth-of-type(7) { --angle: 240deg; }
+    .orbit-node-btn:nth-of-type(8) { --angle: 280deg; }
+    .orbit-node-btn:nth-of-type(9) { --angle: 320deg; }
+    .orbit-node-btn { transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-280px) rotate(calc(-1 * var(--angle) - var(--rotation))); }
+    .orbit-node-btn:hover, .orbit-node-btn:focus-visible, .orbit-node-btn.is-active { z-index: 2; color: var(--text); border-color: var(--cyan); background: rgba(16, 61, 104, .94); box-shadow: 0 0 25px rgba(97, 230, 255, .32); }
+    .orbit-node-btn.is-active { color: var(--cyan); }
+    .orbit-node-btn small { display: block; margin-bottom: 3px; color: var(--cyan); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 11px; }
+    .console-panel { position: relative; z-index: 2; min-height: 330px; padding: 24px; border: 1px solid rgba(126, 190, 255, .34); background: linear-gradient(160deg, rgba(19, 42, 79, .88), rgba(7, 17, 36, .93)); box-shadow: 0 18px 55px rgba(0, 0, 0, .24); }
+    .console-panel::before { content: "ACTIVE MODULE"; display: block; margin-bottom: 28px; color: var(--cyan); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px; letter-spacing: .18em; }
+    .console-index { color: var(--amber); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 12px; }
+    .console-panel h3 { margin: 10px 0 12px; font-size: 28px; line-height: 1.18; }
+    .console-panel p { min-height: 96px; margin-bottom: 22px; color: var(--muted); font-size: 14px; }
+    .console-meta { display: flex; align-items: center; justify-content: space-between; padding-top: 15px; border-top: 1px solid var(--line); color: #83a1c3; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px; letter-spacing: .06em; }
+    .console-meta b { color: var(--cyan); font-weight: 500; }
+    .orbit-controls { display: flex; gap: 8px; margin-top: 19px; }
+    .orbit-control { min-width: 44px; min-height: 44px; border: 1px solid var(--line-bright); color: var(--cyan); background: rgba(18, 51, 91, .45); font: inherit; cursor: pointer; transition: background .2s ease, border-color .2s ease, transform .2s ease; }
+    .orbit-control:hover, .orbit-control:focus-visible { border-color: var(--cyan); background: rgba(33, 86, 139, .7); transform: translateY(-2px); }
+    .orbit-hint { position: absolute; right: 20px; bottom: 18px; color: rgba(168, 186, 209, .7); font-size: 11px; }
+
+    /* second-pass interaction layer */
+    body { font-size: 17px; }
+    .hero-copy { font-size: 20px; line-height: 1.85; }
+    .hero-tagline { font-size: 18px; }
+    .section-head p { font-size: 18px; line-height: 1.8; }
+    .kicker { font-size: 14px; }
+    .intro-main p { font-size: 19px; line-height: 1.85; }
+    .panel { position: relative; overflow: hidden; }
+    .panel::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; background: linear-gradient(115deg, transparent 35%, rgba(97, 230, 255, .1) 48%, transparent 60%); transform: translateX(-110%); transition: opacity .25s ease, transform .7s cubic-bezier(.2,.8,.2,1); }
+    .panel:hover::after { opacity: 1; transform: translateX(110%); }
+    .intro-main, .signal-list, .method-panel, .cadence-readout, .fit-readout, .constellation, .method-constellation, .fit-constellation, .cadence-dial { transition: transform .35s cubic-bezier(.2,.8,.2,1), border-color .35s ease, box-shadow .35s ease, background .35s ease; }
+    .intro-main:hover, .signal-list:hover, .method-panel:hover, .cadence-readout:hover, .fit-readout:hover { transform: translateY(-5px); border-color: rgba(97, 230, 255, .48); box-shadow: 0 22px 55px rgba(20, 112, 190, .16), inset 0 0 24px rgba(97, 230, 255, .04); }
+    .constellation:hover, .method-constellation:hover, .fit-constellation:hover, .cadence-dial:hover { border-color: rgba(97, 230, 255, .42); box-shadow: inset 0 0 90px rgba(69, 127, 255, .12), 0 20px 60px rgba(20, 112, 190, .12); }
+    .orbit:hover .orbit-track, .method-stage:hover .method-ring { border-color: rgba(97, 230, 255, .52); box-shadow: 0 0 55px rgba(97, 230, 255, .16), inset 0 0 50px rgba(185, 137, 255, .08); }
+    .planet:hover { box-shadow: 0 0 48px rgba(97, 230, 255, .86), 0 0 125px rgba(75, 93, 255, .3), inset -16px -20px 34px rgba(0, 0, 0, .42); }
+    .dial-core:hover, .method-core:hover, .fit-core:hover { box-shadow: 0 0 52px rgba(97, 230, 255, .52); }
+    .hero-link:active, .orbit-control:active, .method-controls button:active, .loop-item:active, .signal:active, .cadence-point:active, .method-node:active, .fit-node:active, .orbit-node-btn:active { transform: scale(.97); }
+    .hero-visual::before { content: ""; position: absolute; width: 90%; height: 1px; background: linear-gradient(90deg, transparent, rgba(97, 230, 255, .65), transparent); transform: translateY(-120px); opacity: .75; animation: scanline 4.8s ease-in-out infinite; }
+    .hero-visual::after { content: "SIGNAL LOCKED  /  09 MODULES  /  01 COMMUNITY"; position: absolute; left: 4%; top: 3%; color: rgba(168, 186, 209, .63); font: 11px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .12em; }
+    .intro-main { min-height: 340px; }
+    .signal-list { align-content: center; }
+    .signal { width: 100%; border: 1px solid transparent; padding: 17px 14px; border-radius: 2px; cursor: pointer; color: var(--text); background: transparent; text-align: left; font: inherit; transition: transform .3s cubic-bezier(.2,.8,.2,1), border-color .3s ease, background .3s ease, box-shadow .3s ease; }
+    .signal:hover { transform: translateX(7px); border-color: rgba(97, 230, 255, .45); background: rgba(20, 58, 100, .38); box-shadow: inset 0 0 24px rgba(97, 230, 255, .06); }
+    .signal.is-active { border-color: transparent; background: transparent; transform: none; box-shadow: none; }
+    .signal.is-active:hover { border-color: rgba(97, 230, 255, .45); background: rgba(20, 58, 100, .38); transform: translateX(7px); }
+    .signal-display { position: relative; margin-top: 25px; padding: 16px 18px; border-top: 1px solid var(--line); color: var(--muted); background: rgba(6, 19, 42, .4); }
+    .signal-display::before { content: "LIVE READOUT"; display: block; margin-bottom: 7px; color: var(--cyan); font: 10px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .18em; }
+    .signal-display b { color: var(--text); }
+    .loop { position: relative; grid-template-columns: repeat(3, 1fr); gap: 14px; padding: 34px 0; }
+    .loop::before { content: ""; position: absolute; top: 50%; left: 3%; right: 3%; height: 1px; background: linear-gradient(90deg, transparent, rgba(97, 230, 255, .5), rgba(185, 137, 255, .55), transparent); transform: translateY(-50%); }
+    .loop-item { min-height: 170px; z-index: 1; backdrop-filter: blur(8px); transition: transform .45s cubic-bezier(.2,.8,.2,1), border-color .35s ease, box-shadow .45s ease, background .35s ease; }
+    .loop-item:nth-child(n+4) { transform: translateY(12px); }
+    .loop-item:nth-child(n+4):hover, .loop-item:nth-child(n+4).is-selected { transform: translateY(5px); }
+    .loop-item::after { content: "↗"; top: auto; right: 14px; bottom: 12px; transform: none; opacity: .62; transition: transform .3s ease, opacity .3s ease; }
+    .loop-item:hover::after, .loop-item.is-selected::after { transform: translate(4px, -4px); opacity: 1; }
+    .loop-status { font-size: 16px; min-height: 58px; line-height: 1.7; }
+    .loop-status.is-switching, .signal-display.is-switching, .cadence-readout.is-switching, .console-panel.is-switching { animation: panelshift .34s cubic-bezier(.2,.8,.2,1); }
+    .console-panel h3, .console-panel p, .cadence-readout h3, .cadence-readout p, .signal-display b { transition: color .25s ease, opacity .25s ease; }
+    .method-orbit-console { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 24px; align-items: center; }
+    .method-constellation { position: relative; min-height: 600px; display: grid; place-items: center; overflow: hidden; border: 1px solid rgba(126, 190, 255, .18); background: radial-gradient(circle at 50% 50%, rgba(36, 99, 173, .24), transparent 48%), linear-gradient(135deg, rgba(13, 29, 59, .78), rgba(5, 13, 29, .94)); }
+    .method-constellation::before { content: "PROCESS / SIGNAL FLOW"; position: absolute; top: 18px; left: 20px; color: rgba(173, 216, 255, .62); font: 10px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .18em; }
+    .method-constellation::after { content: ""; position: absolute; inset: 9%; border: 1px solid rgba(97, 230, 255, .2); border-radius: 50%; box-shadow: 0 0 70px rgba(97, 230, 255, .08); }
+    .method-stage { --method-rotation: 0deg; position: relative; z-index: 1; width: min(550px, 88%); aspect-ratio: 1; touch-action: none; cursor: grab; transform: rotate(var(--method-rotation)); transition: transform .55s cubic-bezier(.2,.8,.2,1); }
+    .method-stage.is-dragging { cursor: grabbing; transition: none; }
+    .method-ring { position: absolute; inset: 13%; border: 1px solid rgba(97, 230, 255, .35); border-radius: 50%; box-shadow: inset 0 0 35px rgba(185, 137, 255, .08); }
+    .method-ring::before, .method-ring::after { content: ""; position: absolute; inset: 12%; border: 1px dashed rgba(185, 137, 255, .42); border-radius: 50%; }
+    .method-ring::after { inset: 27%; border-style: solid; border-color: rgba(97, 230, 255, .24); }
+    .method-core { position: absolute; inset: 34%; display: grid; place-items: center; border: 1px solid var(--cyan); border-radius: 50%; color: var(--cyan); background: radial-gradient(circle, rgba(97, 230, 255, .26), rgba(6, 18, 39, .94) 66%); box-shadow: 0 0 40px rgba(97, 230, 255, .28); text-align: center; }
+    .method-core b { display: block; font: 24px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .1em; }
+    .method-core span { display: block; color: rgba(239, 247, 255, .72); font-size: 11px; }
+    .method-node { position: absolute; left: 50%; top: 50%; width: 128px; min-height: 64px; padding: 9px 11px; border: 1px solid rgba(121, 193, 255, .42); color: var(--muted); background: rgba(5, 16, 36, .9); font: inherit; font-size: 15px; cursor: pointer; transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-220px) rotate(calc(-1 * var(--angle) - var(--method-rotation))); transition: transform .55s cubic-bezier(.2,.8,.2,1), color .25s ease, border-color .25s ease, box-shadow .25s ease, background .25s ease; }
+    .method-node:hover, .method-node:focus-visible, .method-node.is-active { color: var(--text); border-color: var(--cyan); background: rgba(19, 65, 108, .92); box-shadow: 0 0 24px rgba(97, 230, 255, .24); }
+    .method-node.is-active { color: var(--cyan); }
+    .method-node small { display: block; margin-bottom: 3px; color: var(--amber); font: 11px ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .method-hint { position: absolute; right: 17px; bottom: 16px; color: rgba(168, 186, 209, .7); font-size: 11px; }
+    .method-panel { min-height: 320px; padding: 28px; border: 1px solid rgba(126, 190, 255, .34); background: linear-gradient(160deg, rgba(19, 42, 79, .88), rgba(7, 17, 36, .93)); }
+    .method-index { color: var(--amber); font: 11px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .08em; }
+    .method-panel h3 { margin: 20px 0 13px; font-size: 30px; }
+    .method-panel p { min-height: 92px; color: var(--muted); font-size: 16px; line-height: 1.75; }
+    .method-progress { display: flex; gap: 5px; margin-top: 22px; }
+    .method-progress i, .fit-meter i { width: 30px; height: 4px; background: rgba(113, 198, 255, .2); }
+    .method-progress i.is-on, .fit-meter i.is-on { background: var(--cyan); box-shadow: 0 0 10px var(--cyan); }
+    .method-controls { display: flex; gap: 8px; margin-top: 22px; }
+    .method-controls button { min-width: 44px; min-height: 44px; border: 1px solid var(--line-bright); color: var(--cyan); background: rgba(18, 51, 91, .45); cursor: pointer; font: inherit; transition: transform .25s ease, background .25s ease, border-color .25s ease; }
+    .method-controls button:hover, .method-controls button:focus-visible { transform: translateY(-2px); border-color: var(--cyan); background: rgba(33, 86, 139, .7); }
+    .fit-console { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 24px; align-items: center; }
+    .fit-constellation { position: relative; min-height: 470px; display: grid; place-items: center; overflow: hidden; border: 1px solid rgba(126, 190, 255, .18); background: radial-gradient(circle at center, rgba(36, 99, 173, .2), transparent 48%), rgba(7, 17, 37, .8); }
+    .fit-constellation::before { content: "ENTRY CONDITIONS / SIGNAL MAP"; position: absolute; top: 18px; left: 20px; color: rgba(173, 216, 255, .62); font: 10px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .16em; }
+    .fit-core { position: relative; z-index: 2; width: 150px; height: 150px; display: grid; place-items: center; border: 1px solid var(--cyan); border-radius: 50%; color: var(--cyan); background: radial-gradient(circle, rgba(97, 230, 255, .24), rgba(7, 18, 39, .92) 68%); box-shadow: 0 0 38px rgba(97, 230, 255, .3); text-align: center; }
+    .fit-core b { display: block; font: 24px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .12em; }
+    .fit-core span { display: block; color: rgba(239, 247, 255, .72); font-size: 11px; }
+    .fit-beam { position: absolute; z-index: 1; width: 42%; height: 1px; background: linear-gradient(90deg, transparent, rgba(97, 230, 255, .55)); transform-origin: left center; left: 50%; top: 50%; }
+    .beam-1 { transform: rotate(0deg); } .beam-2 { transform: rotate(90deg); } .beam-3 { transform: rotate(180deg); } .beam-4 { transform: rotate(270deg); }
+    .fit-node { position: absolute; z-index: 3; top: 50%; left: 50%; width: 105px; min-height: 68px; padding: 8px; border: 1px solid var(--line); color: var(--muted); background: rgba(6, 17, 38, .9); font: inherit; cursor: pointer; transform: translate(-50%, -50%) rotate(var(--fit-angle)) translateY(-158px) rotate(calc(-1 * var(--fit-angle))); transition: transform .35s cubic-bezier(.2,.8,.2,1), color .25s ease, border-color .25s ease, box-shadow .25s ease; }
+    .fit-node:hover, .fit-node:focus-visible, .fit-node.is-active { color: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 24px rgba(97, 230, 255, .25); }
+    .fit-node b, .fit-node span { display: block; } .fit-node b { color: var(--amber); font: 11px ui-monospace, SFMono-Regular, Consolas, monospace; } .fit-node span { margin-top: 3px; font-size: 14px; }
+    .fit-readout { min-height: 250px; padding: 30px; border: 1px solid var(--line); background: linear-gradient(145deg, rgba(18, 42, 79, .8), rgba(7, 16, 34, .8)); }
+    .fit-readout > span { color: var(--cyan); font: 10px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .16em; }
+    .fit-readout h3 { margin: 22px 0 12px; font-size: 28px; }
+    .fit-readout p { min-height: 76px; color: var(--muted); font-size: 16px; line-height: 1.75; }
+    .fit-meter { display: flex; gap: 5px; margin-top: 24px; }
+    .cadence-dial.auto-spin::before { animation: dialpulse 2.8s ease-in-out infinite; }
+    .cadence-point { top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(var(--point-angle)) translateY(-142px) rotate(calc(-1 * var(--point-angle) - var(--cadence-rotation))); }
+    .cadence-point:hover, .cadence-point.is-active { transform: translate(-50%, -50%) rotate(var(--point-angle)) translateY(-142px) rotate(calc(-1 * var(--point-angle) - var(--cadence-rotation))) scale(1.06); }
+    @keyframes dialpulse { 0%, 100% { box-shadow: 0 0 35px rgba(97, 230, 255, .08); } 50% { box-shadow: 0 0 60px rgba(97, 230, 255, .24); } }
+    .cadence-console { display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 24px; align-items: center; }
+    .cadence-dial { position: relative; min-height: 400px; display: grid; place-items: center; border: 1px solid rgba(126, 190, 255, .2); background: radial-gradient(circle, rgba(58, 124, 211, .16), transparent 45%), rgba(8, 18, 39, .6); overflow: hidden; }
+    .cadence-dial::before { content: ""; position: absolute; inset: 12%; border: 1px solid rgba(97, 230, 255, .35); border-radius: 50%; box-shadow: 0 0 35px rgba(97, 230, 255, .08); }
+    .cadence-dial::after { content: "WEEK / MONTH / LOOP"; position: absolute; top: 17px; left: 19px; color: rgba(168, 186, 209, .66); font: 10px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .16em; }
+    .dial-core { z-index: 1; width: 135px; height: 135px; display: grid; place-items: center; border: 1px solid var(--cyan); border-radius: 50%; color: var(--cyan); background: radial-gradient(circle, rgba(97, 230, 255, .24), rgba(8, 18, 39, .9) 65%); box-shadow: 0 0 35px rgba(97, 230, 255, .28); font: 13px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .15em; }
+    .dial-core::after { content: ""; position: absolute; width: 230px; height: 230px; border: 1px dashed rgba(185, 137, 255, .4); border-radius: 50%; animation: dialspin 18s linear infinite; }
+    .cadence-point { position: absolute; z-index: 2; width: 92px; min-height: 46px; padding: 7px 9px; border: 1px solid var(--line); color: var(--muted); background: rgba(6, 17, 38, .88); font: inherit; font-size: 12px; cursor: pointer; transition: transform .35s cubic-bezier(.2,.8,.2,1), color .25s ease, border-color .25s ease, box-shadow .25s ease; }
+    .cadence-point:nth-of-type(1) { --point-angle: 0deg; }
+    .cadence-point:nth-of-type(2) { --point-angle: 90deg; }
+    .cadence-point:nth-of-type(3) { --point-angle: 180deg; }
+    .cadence-point:nth-of-type(4) { --point-angle: 270deg; }
+    .cadence-point:hover, .cadence-point.is-active { color: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 22px rgba(97, 230, 255, .25); transform: scale(1.06); }
+    .cadence-point small { display: block; color: var(--amber); font: 10px ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .cadence-readout { min-height: 300px; padding: 34px; border: 1px solid var(--line); background: linear-gradient(145deg, rgba(18, 42, 79, .8), rgba(7, 16, 34, .8)); }
+    .cadence-readout::before { content: "RHYTHM TELEMETRY"; display: block; margin-bottom: 25px; color: var(--cyan); font: 10px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .18em; }
+    .cadence-readout h3 { margin-bottom: 12px; font-size: 30px; }
+    .cadence-readout p { min-height: 78px; margin: 0; color: var(--muted); font-size: 17px; line-height: 1.8; }
+    .cadence-meter { display: flex; gap: 5px; margin-top: 24px; }
+    .cadence-meter i { display: block; width: 38px; height: 4px; background: rgba(113, 198, 255, .2); }
+    .cadence-meter i.is-on { background: var(--cyan); box-shadow: 0 0 10px var(--cyan); }
+    .fit-grid { gap: 18px; }
+    .fit-card { min-height: 136px; align-items: flex-start; transition: transform .35s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .3s ease; }
+    .fit-card:hover { transform: translateY(-7px) rotateX(2deg); border-color: rgba(97, 230, 255, .55); box-shadow: 0 20px 45px rgba(25, 105, 181, .15); }
+    .fit-card b { font-size: 18px; }
+    .fit-card span { font-size: 16px; line-height: 1.7; }
+    .closing { padding-top: 110px; }
+    .closing::after { content: ""; position: absolute; left: 50%; bottom: 45px; width: 160px; height: 1px; transform: translateX(-50%); background: linear-gradient(90deg, transparent, var(--cyan), transparent); box-shadow: 0 0 16px var(--cyan); }
+    @keyframes scanline { 0%, 100% { transform: translateY(-150px); opacity: 0; } 20% { opacity: .7; } 50% { transform: translateY(150px); opacity: .55; } 70% { opacity: 0; } }
+    @keyframes dialspin { to { transform: rotate(360deg); } }
+    @keyframes panelshift { 0% { opacity: .35; transform: translateY(8px); } 100% { opacity: 1; transform: translateY(0); } }
+
+    .cadence { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .cadence-card { padding: 26px; min-height: 210px; }
+    .cadence-card .icon { width: 34px; height: 34px; display: grid; place-items: center; margin-bottom: 22px; border: 1px solid var(--cyan); color: var(--cyan); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .cadence-card h3 { margin-bottom: 8px; font-size: 19px; }
+    .cadence-card p { margin: 0; color: var(--muted); font-size: 14px; }
+
+    .fit-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .fit-card { display: flex; gap: 17px; padding: 24px; }
+    .fit-card .check { flex: 0 0 auto; color: var(--cyan); font-size: 20px; }
+    .fit-card b { display: block; margin-bottom: 4px; }
+    .fit-card span { color: var(--muted); font-size: 14px; }
+
+    .closing { position: relative; overflow: hidden; padding: 80px 0 105px; text-align: center; }
+    .closing::before { content: ""; position: absolute; top: 0; left: 50%; width: 600px; height: 240px; transform: translateX(-50%); background: radial-gradient(ellipse, rgba(97, 230, 255, .15), transparent 68%); pointer-events: none; }
+    .closing h2 { position: relative; max-width: 760px; margin: 0 auto 18px; }
+    .closing p { position: relative; max-width: 630px; margin: 0 auto; color: var(--muted); }
+    .closing-line { display: inline-block; margin-top: 30px; color: var(--amber); letter-spacing: .16em; }
+    footer { padding: 24px 0 34px; border-top: 1px solid rgba(133, 193, 255, .14); color: #778aa5; font-size: 12px; }
+    footer .wrap { display: flex; justify-content: space-between; gap: 18px; }
+
+    @media (max-width: 900px) {
+      .hero-grid, .intro-grid { grid-template-columns: 1fr; }
+      .hero { min-height: auto; padding-top: 125px; }
+      .hero-visual { min-height: 370px; order: -1; }
+      .loop { grid-template-columns: repeat(3, 1fr); }
+      .loop-item:nth-child(3)::after { display: none; }
+      .loop-item:nth-child(4)::after { display: block; }
+      .cadence { grid-template-columns: repeat(2, 1fr); }
+      .cadence-console { grid-template-columns: 1fr; }
+      .cadence-dial { min-height: 360px; }
+      .method-orbit-console, .fit-console { grid-template-columns: 1fr; }
+      .method-constellation { min-height: min(620px, 88vw); }
+      .method-stage { width: min(550px, 92vw); }
+      .method-node { transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-205px) rotate(calc(-1 * var(--angle) - var(--method-rotation))); }
+      .fit-constellation { min-height: min(500px, 78vw); }
+      .orbit-console { grid-template-columns: 1fr; min-height: auto; }
+      .constellation { min-height: min(650px, 88vw); }
+      .orbit-stage { width: min(620px, 94vw); }
+      .orbit-node-btn { width: 100px; transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-205px) rotate(calc(-1 * var(--angle) - var(--rotation))); }
+    }
+    @media (max-width: 620px) {
+      .wrap { width: min(var(--max), calc(100% - 28px)); }
+      .nav-links { display: none; }
+      .hero { padding-bottom: 60px; }
+      h1 { font-size: clamp(42px, 15vw, 64px); }
+      .hero-copy { font-size: 16px; }
+      section { padding: 70px 0; }
+      .intro-main, .signal-list, .cadence-card, .fit-card { padding: 22px; }
+      .loop { grid-template-columns: 1fr 1fr; }
+      .loop-item::after, .loop-item:nth-child(3)::after, .loop-item:nth-child(5)::after { display: none; }
+      .stage { grid-template-columns: 38px minmax(0, 1fr); gap: 14px; }
+      .stage-dot { width: 38px; height: 38px; }
+      .stage-note { grid-column: 2; justify-self: start; margin-top: -10px; }
+      .fit-grid, .cadence { grid-template-columns: 1fr; }
+      .cadence-dial { min-height: 330px; }
+      .cadence-readout { padding: 24px; }
+      .cadence-readout h3 { font-size: 25px; }
+      .cadence-readout p { font-size: 16px; }
+      .signal-display { font-size: 15px; }
+      .method-constellation { min-height: 470px; }
+      .method-stage { width: 500px; max-width: 150vw; }
+      .method-node { width: 96px; min-height: 52px; padding: 7px 6px; font-size: 12px; transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-170px) rotate(calc(-1 * var(--angle) - var(--method-rotation))); }
+      .method-node small { font-size: 9px; }
+      .method-panel { padding: 24px; }
+      .fit-constellation { min-height: 390px; }
+      .fit-node { width: 88px; min-height: 55px; transform: translate(-50%, -50%) rotate(var(--fit-angle)) translateY(-125px) rotate(calc(-1 * var(--fit-angle))); }
+      .fit-core { width: 126px; height: 126px; }
+      .fit-readout { padding: 24px; }
+      .constellation { min-height: 470px; }
+      .orbit-stage { width: 520px; max-width: 150vw; }
+      .orbit-node-btn { width: 94px; min-height: 52px; padding: 7px 6px; font-size: 12px; transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-168px) rotate(calc(-1 * var(--angle) - var(--rotation))); }
+      .orbit-node-btn small { font-size: 8px; }
+      .planet { inset: 36%; }
+      .orbit-hint { right: 12px; bottom: 12px; font-size: 10px; }
+      footer .wrap { display: block; }
+      footer p { margin: 4px 0; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .orbit { animation: drift 18s ease-in-out infinite alternate; }
+      .orbit-core { animation: pulse 3s ease-in-out infinite; }
+      @keyframes drift { from { transform: rotate(-21deg) translate3d(0, 0, 0); } to { transform: rotate(-16deg) translate3d(0, -8px, 0); } }
+      @keyframes pulse { 0%, 100% { transform: scale(.96); opacity: .8; } 50% { transform: scale(1.06); opacity: 1; } }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; } }
+
+    /* precision interaction pass: static labels, moving spatial layer */
+    .hero-actions { position: relative; display: grid; grid-template-columns: repeat(2, minmax(190px, max-content)); gap: 16px 28px; padding-left: 26px; }
+    .hero-actions::before { content: ""; position: absolute; left: 7px; top: 3px; bottom: 3px; width: 1px; background: linear-gradient(var(--cyan), rgba(185, 137, 255, .22), transparent); box-shadow: 0 0 12px rgba(97, 230, 255, .5); }
+    .hero-link { position: relative; min-height: 48px; padding: 0 0 0 28px; border: 0; background: transparent; color: var(--text); font-size: 16px; letter-spacing: .03em; transform: none; transition: color .25s ease, text-shadow .25s ease, transform .25s ease; }
+    .hero-link::before { content: "01"; position: absolute; left: -1px; top: 50%; color: var(--cyan); font: 11px ui-monospace, SFMono-Regular, Consolas, monospace; transform: translate(-50%, -50%); text-shadow: 0 0 12px rgba(97, 230, 255, .8); }
+    .hero-link:nth-child(2)::before { content: "02"; color: var(--violet); text-shadow: 0 0 12px rgba(185, 137, 255, .8); }
+    .hero-link::after { content: "↗"; margin-left: 3px; color: var(--cyan); transition: transform .25s ease, color .25s ease; }
+    .hero-link:hover, .hero-link:focus-visible { color: var(--cyan); text-shadow: 0 0 18px rgba(97, 230, 255, .38); transform: translateX(8px); background: transparent; box-shadow: none; }
+    .hero-link:hover::after, .hero-link:focus-visible::after { transform: translate(4px, -3px); color: var(--amber); }
+
+    .method-stage, .orbit-stage { transform: none; transition: none; }
+    .method-stage.is-dragging, .orbit-stage.is-dragging { cursor: grabbing; }
+    .method-ring { transform: rotate(var(--method-rotation)); transition: transform .55s cubic-bezier(.2,.8,.2,1); }
+    .method-stage.is-dragging .method-ring, .orbit-stage.is-dragging .orbit-track, .orbit-stage.is-dragging .planet, .orbit-stage.auto-spin .orbit-track, .orbit-stage.auto-spin .planet { transition: none; }
+    .method-node { left: auto; top: auto; transform: translate(-50%, -50%); transition: color .25s ease, border-color .25s ease, box-shadow .25s ease, background .25s ease, transform .25s ease; z-index: 3; pointer-events: auto; }
+    .method-node:nth-of-type(1) { left: 50%; top: 7%; }
+    .method-node:nth-of-type(2) { left: 88%; top: 27%; }
+    .method-node:nth-of-type(3) { left: 88%; top: 73%; }
+    .method-node:nth-of-type(4) { left: 50%; top: 93%; }
+    .method-node:nth-of-type(5) { left: 12%; top: 73%; }
+    .method-node:nth-of-type(6) { left: 12%; top: 27%; }
+    .method-node:hover, .method-node:focus-visible, .method-node.is-active { transform: translate(-50%, -50%) scale(1.06); }
+
+    .orbit-track { transform: rotate(var(--rotation)); transform-origin: center; transition: transform .55s cubic-bezier(.2,.8,.2,1); }
+    .planet { transform: rotate(var(--rotation)); transition: transform .55s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease; }
+    .planet-core { transform: rotate(calc(var(--rotation) * -1)); transition: transform .55s cubic-bezier(.2,.8,.2,1); }
+    .orbit-node-btn { left: auto; top: auto; transform: translate(-50%, -50%); transition: color .22s ease, border-color .22s ease, background .22s ease, box-shadow .22s ease, transform .25s ease; z-index: 3; pointer-events: auto; }
+    .orbit-node-btn:nth-of-type(1) { left: 50%; top: 7%; }
+    .orbit-node-btn:nth-of-type(2) { left: 78%; top: 14%; }
+    .orbit-node-btn:nth-of-type(3) { left: 94%; top: 35%; }
+    .orbit-node-btn:nth-of-type(4) { left: 94%; top: 65%; }
+    .orbit-node-btn:nth-of-type(5) { left: 78%; top: 86%; }
+    .orbit-node-btn:nth-of-type(6) { left: 50%; top: 93%; }
+    .orbit-node-btn:nth-of-type(7) { left: 22%; top: 86%; }
+    .orbit-node-btn:nth-of-type(8) { left: 6%; top: 65%; }
+    .orbit-node-btn:nth-of-type(9) { left: 6%; top: 35%; }
+    .orbit-node-btn:hover, .orbit-node-btn:focus-visible, .orbit-node-btn.is-active { transform: translate(-50%, -50%) scale(1.07); }
+
+    .cadence-dial { --cadence-rotation: 0deg; }
+    .cadence-dial::before { transform: rotate(var(--cadence-rotation)); transition: transform .55s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease; }
+    .cadence-point { top: auto; left: auto; z-index: 20; transform: translate(-50%, -50%); pointer-events: auto; transition: color .25s ease, border-color .25s ease, box-shadow .25s ease, transform .25s ease, background .25s ease; }
+    .cadence-point:nth-of-type(1) { left: 50%; top: 10%; }
+    .cadence-point:nth-of-type(2) { left: 89%; top: 50%; }
+    .cadence-point:nth-of-type(3) { left: 50%; top: 90%; }
+    .cadence-point:nth-of-type(4) { left: 11%; top: 50%; }
+    .cadence-point:hover, .cadence-point:focus-visible, .cadence-point.is-active { transform: translate(-50%, -50%) scale(1.08); }
+
+    .fit-constellation { isolation: isolate; }
+    .fit-node { top: auto; left: auto; z-index: 30; transform: translate(-50%, -50%); pointer-events: auto; transition: color .25s ease, border-color .25s ease, box-shadow .25s ease, transform .25s ease, background .25s ease; }
+    .fit-node:nth-of-type(1) { left: 50%; top: 10%; }
+    .fit-node:nth-of-type(2) { left: 90%; top: 50%; }
+    .fit-node:nth-of-type(3) { left: 50%; top: 90%; }
+    .fit-node:nth-of-type(4) { left: 10%; top: 50%; }
+    .fit-node:hover, .fit-node:focus-visible, .fit-node.is-active { transform: translate(-50%, -50%) scale(1.08); background: rgba(16, 61, 104, .94); }
+
+    @media (max-width: 900px) {
+      .hero-actions { grid-template-columns: 1fr 1fr; }
+      .method-node, .orbit-node-btn { transform: translate(-50%, -50%); }
+    }
+    @media (max-width: 620px) {
+      .hero-actions { grid-template-columns: 1fr; gap: 10px; }
+      .hero-link { min-height: 42px; font-size: 15px; }
+      .method-node { width: 96px; min-height: 52px; padding: 7px 6px; font-size: 12px; }
+      .orbit-node-btn { width: 94px; min-height: 52px; padding: 7px 6px; font-size: 12px; }
+      .method-node small { font-size: 9px; }
+      .orbit-node-btn small { font-size: 8px; }
+      .cadence-point { width: 86px; font-size: 11px; }
+      .fit-node { width: 88px; min-height: 55px; }
+    }
+
+    /* galaxy framing and final spatial calibration */
+    .galaxy-frame { position: fixed; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; opacity: .98; mix-blend-mode: screen; background: radial-gradient(ellipse at 18% 28%, rgba(31, 89, 176, .18), transparent 30%), radial-gradient(ellipse at 84% 62%, rgba(112, 60, 180, .17), transparent 32%), radial-gradient(ellipse at 52% 105%, rgba(13, 120, 168, .15), transparent 38%); }
+    main, footer { position: relative; z-index: 1; }
+    .galaxy-frame::before, .galaxy-frame::after { content: ""; position: absolute; width: 150vw; height: 42vh; left: -25vw; top: 29vh; border: 1px solid rgba(97, 230, 255, .2); border-radius: 50%; transform: rotate(-16deg); box-shadow: 0 0 45px rgba(97, 230, 255, .13), inset 0 0 55px rgba(185, 137, 255, .07); }
+    .galaxy-frame::after { width: 126vw; height: 26vh; left: -13vw; top: 37vh; border-color: rgba(185, 137, 255, .18); transform: rotate(22deg); box-shadow: 0 0 58px rgba(185, 137, 255, .12); }
+    .galaxy-star { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 16px 4px rgba(97, 230, 255, .58); animation: starblink 4.2s ease-in-out infinite; }
+    .galaxy-star::after { content: ""; position: absolute; left: 50%; top: 50%; width: 42px; height: 1px; background: linear-gradient(90deg, rgba(97, 230, 255, .6), transparent); transform: translate(-2px, -50%) rotate(-22deg); transform-origin: left center; }
+    .star-1 { left: 4vw; top: 18vh; animation-delay: -.8s; }
+    .star-2 { right: 7vw; top: 33vh; width: 3px; height: 3px; background: var(--violet); box-shadow: 0 0 12px 3px rgba(185, 137, 255, .42); animation-delay: -2.2s; }
+    .star-3 { left: 10vw; bottom: 18vh; width: 3px; height: 3px; background: var(--amber); box-shadow: 0 0 12px 3px rgba(255, 197, 109, .35); animation-delay: -3.1s; }
+    .star-4 { right: 4vw; bottom: 10vh; animation-delay: -1.4s; }
+    .star-5 { left: 32vw; top: 8vh; width: 2px; height: 2px; background: var(--violet); box-shadow: 0 0 10px 3px rgba(185, 137, 255, .45); animation-delay: -2.7s; }
+    .star-6 { right: 26vw; top: 17vh; width: 2px; height: 2px; animation-delay: -1.9s; }
+    .star-7 { left: 39vw; bottom: 9vh; width: 2px; height: 2px; background: var(--violet); box-shadow: 0 0 10px 3px rgba(185, 137, 255, .42); animation-delay: -.4s; }
+    .star-8 { right: 18vw; bottom: 27vh; width: 3px; height: 3px; background: var(--amber); box-shadow: 0 0 12px 3px rgba(255, 197, 109, .4); animation-delay: -3.6s; }
+    @keyframes starblink { 0%, 100% { opacity: .32; transform: scale(.8); } 50% { opacity: 1; transform: scale(1.35); } }
+
+    .orbit-node-btn:nth-of-type(1) { left: 50%; top: 10%; }
+    .orbit-node-btn:nth-of-type(2) { left: 80%; top: 20%; }
+    .orbit-node-btn:nth-of-type(3) { left: 88%; top: 43%; }
+    .orbit-node-btn:nth-of-type(4) { left: 84%; top: 70%; }
+    .orbit-node-btn:nth-of-type(5) { left: 63%; top: 86%; }
+    .orbit-node-btn:nth-of-type(6) { left: 37%; top: 86%; }
+    .orbit-node-btn:nth-of-type(7) { left: 16%; top: 70%; }
+    .orbit-node-btn:nth-of-type(8) { left: 12%; top: 43%; }
+    .orbit-node-btn:nth-of-type(9) { left: 20%; top: 20%; }
+
+    .cadence-console { grid-template-columns: minmax(390px, .84fr) minmax(0, 1fr); column-gap: 52px; padding: 12px; margin: -12px; }
+    .cadence-dial, .cadence-readout { position: relative; min-width: 0; outline: 1px solid transparent; outline-offset: 7px; transition: transform .35s cubic-bezier(.2,.8,.2,1), border-color .35s ease, box-shadow .35s ease, outline-color .35s ease; }
+    .cadence-dial { min-height: 460px; overflow: visible; z-index: 1; }
+    .cadence-readout { z-index: 1; }
+    .cadence-dial:hover, .cadence-readout:hover { z-index: 4; outline-color: rgba(97, 230, 255, .42); }
+    .cadence-point { display: flex; flex-direction: column; justify-content: center; gap: 3px; width: 100px; min-height: 58px; line-height: 1.25; white-space: nowrap; }
+    .cadence-point small { line-height: 1.1; }
+    .cadence-point:nth-of-type(1) { left: 50%; top: 25%; }
+    .cadence-point:nth-of-type(2) { left: 84%; top: 50%; }
+    .cadence-point:nth-of-type(3) { left: 50%; top: 75%; }
+    .cadence-point:nth-of-type(4) { left: 16%; top: 50%; }
+    .closing-line { position: relative; padding: 11px 28px; color: transparent; background: linear-gradient(90deg, var(--amber), var(--cyan), var(--violet), var(--amber)); background-size: 240% 100%; background-clip: text; -webkit-background-clip: text; letter-spacing: .22em; animation: sloganFlow 5.5s linear infinite, sloganLift 2.8s ease-in-out infinite; }
+    .closing-line::before, .closing-line::after { content: ""; position: absolute; top: 50%; width: 66px; height: 1px; background: linear-gradient(90deg, transparent, var(--cyan)); box-shadow: 0 0 12px rgba(97, 230, 255, .65); }
+    .closing-line::before { right: 100%; }
+    .closing-line::after { left: 100%; transform: rotate(180deg); }
+    @keyframes sloganFlow { to { background-position: 240% 0; } }
+    @keyframes sloganLift { 0%, 100% { text-shadow: 0 0 8px rgba(97, 230, 255, .12); transform: translateY(0); } 50% { text-shadow: 0 0 22px rgba(97, 230, 255, .42); transform: translateY(-3px); } }
+
+    @media (max-width: 900px) {
+      .cadence-dial { min-height: 400px; }
+      .cadence-console { grid-template-columns: 1fr; gap: 30px; padding: 8px; margin: -8px; }
+    }
+    @media (max-width: 620px) {
+      .cadence-dial { min-height: 360px; }
+      .cadence-point { width: 86px; min-height: 54px; font-size: 11px; }
+      .cadence-point:nth-of-type(1) { top: 25%; }
+      .cadence-point:nth-of-type(3) { top: 75%; }
+      .closing-line { padding-inline: 10px; letter-spacing: .12em; }
+      .closing-line::before, .closing-line::after { width: 26px; }
+    }
+    @media (prefers-reduced-motion: reduce) { .galaxy-star, .closing-line { animation: none; } }
+  </style>
+</head>
+<body>
+  <div class="cursor-glow" aria-hidden="true"></div>
+  <div class="galaxy-frame" aria-hidden="true"><i class="galaxy-star star-1"></i><i class="galaxy-star star-2"></i><i class="galaxy-star star-3"></i><i class="galaxy-star star-4"></i><i class="galaxy-star star-5"></i><i class="galaxy-star star-6"></i><i class="galaxy-star star-7"></i><i class="galaxy-star star-8"></i></div>
+  <header class="topbar">
+    <div class="scroll-progress" aria-hidden="true"></div>
+    <nav class="nav wrap" aria-label="页面导航">
+      <a class="brand" href="#top" aria-label="返回经纬智星首页"><span class="brand-mark" aria-hidden="true"></span><span>经纬智星</span></a>
+      <div class="nav-links">
+        <a href="#about">组织定位</a>
+        <a href="#method">学习方式</a>
+        <a href="#roadmap">学习路线</a>
+        <a href="#rhythm">运行节奏</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="eyebrow"><i aria-hidden="true"></i>虎峪校区 · 地球科学与测绘工程学院</div>
+          <h1>从理解 AI，<br><span>到用好 AI。</span></h1>
+          <p class="hero-copy">经纬智星是面向学院学生的 AI 学习与实践组织。我们从基础出发，在持续学习、独立实践和技术交流中，建立真正能够面向未来的能力。</p>
+          <p class="hero-tagline"><strong>以学习打底</strong>　以实践求真　以协作致远</p>
+          <div class="hero-actions"><a class="hero-link" href="#roadmap">查看 AI 成长路线</a><a class="hero-link" href="#method">进入学习闭环</a></div>
+        </div>
+        <div class="hero-visual" aria-label="经纬轨道视觉图" role="img">
+          <div class="orbit"><span class="orbit-ring"></span><span class="orbit-core"></span><span class="orbit-node node-a"></span><span class="orbit-node node-b"></span><span class="orbit-node node-c"></span></div>
+          <div class="visual-label"><b>LEARNING ORBIT / 01</b>每一次理解，都是一次坐标更新</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="wrap">
+        <div class="section-head"><div class="kicker">01 / WHY JINGWEI ZHIXING</div><h2>AI 让知识更近，<br>能力仍然需要一步步建立。</h2><p>获取资料已经变得容易，但真正理解、验证并使用 AI，仍然需要基础、实践、反馈和持续投入。</p></div>
+        <div class="intro-grid">
+          <article class="panel intro-main"><p>经纬智星希望建立一个面向虎峪校区地球科学与测绘工程学院学生的学习共同体。组织围绕 AI 基础学习展开，不要求所有人从同一专业出发，也不要求一开始就拥有编程经验。</p><p>我们提供学习主题、目标和资源，成员根据自己的基础自主学习，再通过实践和交流把零散知识变成能够理解、修改、验证和继续延伸的能力。</p></article>
+          <div class="panel signal-list" aria-label="组织价值">
+            <button class="signal is-active" type="button" data-signal-title="理解" data-signal-copy="知道工具为什么有效，也知道它什么时候会出错。"><span class="signal-num">01</span><div><b>理解</b><span>知道工具为什么有效，也知道它什么时候会出错。</span></div></button>
+            <button class="signal" type="button" data-signal-title="实践" data-signal-copy="把一个问题推进到可以运行、可以解释的结果。"><span class="signal-num">02</span><div><b>实践</b><span>把一个问题推进到可以运行、可以解释的结果。</span></div></button>
+            <button class="signal" type="button" data-signal-title="成长" data-signal-copy="在交流和复盘中，形成持续学习的能力。"><span class="signal-num">03</span><div><b>成长</b><span>在交流和复盘中，形成持续学习的能力。</span></div></button>
+          </div>
+          <div class="signal-display" aria-live="polite"><b>理解</b>　知道工具为什么有效，也知道它什么时候会出错。</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="method">
+      <div class="wrap">
+        <div class="section-head"><div class="kicker">02 / LEARNING METHOD</div><h2>不是把答案交给你，<br>而是一起走完答案产生的过程。</h2><p>负责人提供路线、主题、目标和学习资源；成员以自主学习和独立实践为主，在集中复盘与技术交流中共同推进。</p></div>
+        <div class="method-orbit-console">
+          <div class="method-constellation" aria-label="可交互的学习闭环">
+            <div class="method-stage" id="methodStage" tabindex="0" aria-label="拖动或点击旋转学习闭环">
+              <div class="method-ring" aria-hidden="true"></div>
+              <div class="method-core"><b>LEARN</b><span>学习闭环</span></div>
+              <button class="method-node is-active" type="button" data-index="01" data-title="获取资源" data-copy="先找到值得学习的材料和真实问题，再决定这一周要把什么学明白。" style="--angle:0deg"><small>01</small>获取资源</button>
+              <button class="method-node" type="button" data-index="02" data-title="自主学习" data-copy="按照自己的基础拆分目标，允许使用 AI 辅助理解，但必须自己运行和验证。" style="--angle:60deg"><small>02</small>自主学习</button>
+              <button class="method-node" type="button" data-index="03" data-title="独立实践" data-copy="把理解落到代码、数据、实验或一个可展示的小成果上。" style="--angle:120deg"><small>03</small>独立实践</button>
+              <button class="method-node" type="button" data-index="04" data-title="记录问题" data-copy="保留报错、疑问、失败尝试和判断依据，让问题变成下一次交流的入口。" style="--angle:180deg"><small>04</small>记录问题</button>
+              <button class="method-node" type="button" data-index="05" data-title="集中复盘" data-copy="在集中交流中看见不同解法，补足自己的理解，也帮助别人越过同一个卡点。" style="--angle:240deg"><small>05</small>集中复盘</button>
+              <button class="method-node" type="button" data-index="06" data-title="持续迭代" data-copy="把本周的成果、问题和方法沉淀下来，成为下一阶段继续探索的坐标。" style="--angle:300deg"><small>06</small>持续迭代</button>
+            </div>
+            <span class="method-hint">拖动环轨或点击节点查看学习动作</span>
+          </div>
+          <aside class="method-panel" aria-live="polite"><span class="method-index">STEP 01 / INPUT</span><h3>获取资源</h3><p>先找到值得学习的材料和真实问题，再决定这一周要把什么学明白。</p><div class="method-progress"><i class="is-on"></i><i></i><i></i><i></i><i></i><i></i></div><div class="method-controls"><button type="button" data-method-rotate="-60" aria-label="查看上一个学习动作">←</button><button type="button" data-method-rotate="60" aria-label="查看下一个学习动作">→</button></div></aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="roadmap">
+      <div class="wrap">
+        <div class="section-head"><div class="kicker">03 / AI GROWTH ROUTE</div><h2>一条可以不断向前延伸的 AI 路线</h2><p>学习路线提供共同底座，也为后续分流留下空间。成员可以从基础开始，逐步选择自己真正感兴趣的方向。</p></div>
+        <div class="orbit-console">
+          <div class="constellation" aria-label="可交互的 AI 学习路线星图">
+            <div class="orbit-stage" id="orbitStage" tabindex="0" aria-label="拖动或使用方向按钮旋转 AI 学习路线">
+              <div class="orbit-track" aria-hidden="true"></div>
+              <div class="planet"><div class="planet-core"><b>AI</b><span>LEARNING CORE</span></div></div>
+              <button class="orbit-node-btn is-active" type="button" data-index="01" data-title="AI 素养" data-copy="认识 AI 的能力边界、常见应用、信息判断、提示设计、结果验证和数据安全。" style="--angle: 0deg"><small>01 / CORE</small>AI 素养</button>
+              <button class="orbit-node-btn" type="button" data-index="02" data-title="Python 与编程基础" data-copy="掌握基本语法、函数、数据结构、文件处理和调试，能够读懂、修改并运行基础代码。" style="--angle: 40deg"><small>02 / BASE</small>Python 基础</button>
+              <button class="orbit-node-btn" type="button" data-index="03" data-title="数据处理与表达" data-copy="学习数据读取、清洗、统计、可视化和结果说明，让数据能够被看懂、被复现。" style="--angle: 80deg"><small>03 / DATA</small>数据表达</button>
+              <button class="orbit-node-btn" type="button" data-index="04" data-title="机器学习基础" data-copy="理解特征、标签、训练、验证、测试、评价指标、过拟合和错误分析。" style="--angle: 120deg"><small>04 / MODEL</small>机器学习</button>
+              <button class="orbit-node-btn" type="button" data-index="05" data-title="深度学习基础" data-copy="接触神经网络、损失函数、训练过程、PyTorch 和基础模型实践。" style="--angle: 160deg"><small>05 / DEEP</small>深度学习</button>
+              <button class="orbit-node-btn" type="button" data-index="06" data-title="大模型与生成式 AI" data-copy="了解大语言模型、模型调用、知识检索、智能体和生成结果的验证方法。" style="--angle: 200deg"><small>06 / GEN</small>生成式 AI</button>
+              <button class="orbit-node-btn" type="button" data-index="07" data-title="AI 项目实践" data-copy="从问题定义、数据准备到评价、展示和复盘，完成一个可运行、可解释的小型项目。" style="--angle: 240deg"><small>07 / BUILD</small>项目实践</button>
+              <button class="orbit-node-btn" type="button" data-index="08" data-title="专业方向应用" data-copy="结合地质、测绘、资源勘查、采矿等专业问题，选择属于自己的 AI 实践方向。" style="--angle: 280deg"><small>08 / FIELD</small>专业应用</button>
+              <button class="orbit-node-btn" type="button" data-index="09" data-title="持续探索" data-copy="继续深入计算机视觉、自然语言处理、科研复现、AI 工程或其他感兴趣的领域。" style="--angle: 320deg"><small>09 / NEXT</small>持续探索</button>
+            </div>
+            <span class="orbit-hint">拖动轨道旋转 · 点击节点查看模块</span>
+          </div>
+          <aside class="console-panel" aria-live="polite">
+            <span class="console-index">MODULE 01 / CORE</span>
+            <h3>AI 素养</h3>
+            <p>认识 AI 的能力边界、常见应用、信息判断、提示设计、结果验证和数据安全。</p>
+            <div class="console-meta"><span>STATUS <b>ACTIVE</b></span><span>01 / 09</span></div>
+            <div class="orbit-controls"><button class="orbit-control" type="button" data-rotate="-40" aria-label="查看上一个学习模块">←</button><button class="orbit-control" type="button" data-rotate="40" aria-label="查看下一个学习模块">→</button></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="rhythm">
+      <div class="wrap">
+        <div class="section-head"><div class="kicker">04 / ORGANIZATION RHYTHM</div><h2>让学习有节奏，<br>让成果慢慢留下来。</h2><p>组织不追求一次活动解决所有问题，而是通过稳定的节奏，让每一次投入都能被看见、被交流、被积累。</p></div>
+        <div class="cadence-console">
+          <div class="cadence-dial" aria-label="组织运行节奏选择器">
+            <div class="dial-core">RHYTHM</div>
+            <button class="cadence-point is-active" type="button" data-cadence-title="每周学习任务" data-cadence-copy="发布学习主题、推荐资源和可验证的实践任务。参考投入约 10 小时，成员可根据基础合理安排。"><small>WEEK / 01</small>学习任务</button>
+            <button class="cadence-point" type="button" data-cadence-title="学习复盘与答疑" data-cadence-copy="集中交流自学中的共性问题、代码实践和阶段理解，补充必要内容。"><small>WEEK / 02</small>复盘答疑</button>
+            <button class="cadence-point" type="button" data-cadence-title="每月技术交流" data-cadence-copy="分享学习心得、工具体验、项目进展或阅读收获，让不同方向的探索彼此连接。"><small>MONTH / 03</small>技术交流</button>
+            <button class="cadence-point" type="button" data-cadence-title="持续项目实践" data-cadence-copy="在基础学习之后，以个人或小组项目把问题、数据、方法和结果串成完整经历。"><small>LOOP / 04</small>项目实践</button>
+          </div>
+          <div class="cadence-readout" aria-live="polite">
+            <h3>每周学习任务</h3>
+            <p>发布学习主题、推荐资源和可验证的实践任务。参考投入约 10 小时，成员可根据基础合理安排。</p>
+            <div class="cadence-meter" aria-hidden="true"><i class="is-on"></i><i></i><i></i><i></i></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="section-head"><div class="kicker">05 / WHO IS IT FOR</div><h2>如果你愿意从基础开始，<br>这里就有你的位置。</h2><p>我们更看重持续学习的意愿，而不是报名时已经掌握了多少知识。</p></div>
+        <div class="fit-console">
+          <div class="fit-constellation" aria-label="加入经纬智星的四个条件">
+            <div class="fit-core"><b>JOIN</b><span>你的坐标</span></div>
+            <div class="fit-beam beam-1"></div><div class="fit-beam beam-2"></div><div class="fit-beam beam-3"></div><div class="fit-beam beam-4"></div>
+            <button class="fit-node is-active" type="button" data-fit-title="对 AI 有真实兴趣" data-fit-copy="想知道 AI 如何工作，也想知道它能为自己做什么。" style="--fit-angle:0deg"><b>01</b><span>兴趣</span></button>
+            <button class="fit-node" type="button" data-fit-title="愿意持续学习" data-fit-copy="能够为每周学习留出时间，按自己的节奏逐步推进。" style="--fit-angle:90deg"><b>02</b><span>持续</span></button>
+            <button class="fit-node" type="button" data-fit-title="愿意动手实践" data-fit-copy="不满足于只看资料，愿意把理解转化为代码、数据或项目。" style="--fit-angle:180deg"><b>03</b><span>实践</span></button>
+            <button class="fit-node" type="button" data-fit-title="愿意参与交流" data-fit-copy="愿意分享自己的问题、过程和收获，也愿意听见别人的思路。" style="--fit-angle:270deg"><b>04</b><span>交流</span></button>
+          </div>
+          <div class="fit-readout" aria-live="polite"><span>ENTRY SIGNAL / ACTIVE</span><h3>对 AI 有真实兴趣</h3><p>想知道 AI 如何工作，也想知道它能为自己做什么。</p><div class="fit-meter"><i class="is-on"></i><i></i><i></i><i></i></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing">
+      <div class="wrap">
+        <h2>在变化很快的时代，<br>把学习变成自己的坐标。</h2>
+        <p>经纬智星希望和一群愿意探索的同学，从基础出发，穿过问题、实践与交流，走向更辽阔的 AI 世界。</p>
+        <span class="closing-line">经纬交汇，智启星河</span>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap"><p>经纬智星 · AI 学习与实践共同体</p><p>面向虎峪校区地球科学与测绘工程学院学生</p></div>
+  </footer>
+  <script>
+    (() => {
+      const progress = document.querySelector('.scroll-progress');
+      const glow = document.querySelector('.cursor-glow');
+      const navLinks = [...document.querySelectorAll('.nav-links a')];
+      const sections = navLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const updateScrollState = () => {
+        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        const ratio = scrollable > 0 ? window.scrollY / scrollable : 0;
+        progress.style.transform = `scaleX(${Math.min(1, Math.max(0, ratio))})`;
+        let current = '';
+        sections.forEach(section => {
+          if (section.getBoundingClientRect().top <= window.innerHeight * .35) current = section.id;
+        });
+        navLinks.forEach(link => link.classList.toggle('is-active', link.getAttribute('href') === `#${current}`));
+      };
+      updateScrollState();
+      window.addEventListener('scroll', updateScrollState, { passive: true });
+
+      if (!reducedMotion && window.matchMedia('(pointer: fine)').matches) {
+        window.addEventListener('pointermove', event => {
+          glow.style.left = `${event.clientX}px`;
+          glow.style.top = `${event.clientY}px`;
+          glow.style.opacity = '.9';
+          const visual = document.querySelector('.hero-visual');
+          const orbit = document.querySelector('.orbit');
+          if (visual && orbit && event.clientY < window.innerHeight * 1.2) {
+            const rect = visual.getBoundingClientRect();
+            const dx = (event.clientX - rect.left - rect.width / 2) / rect.width;
+            const dy = (event.clientY - rect.top - rect.height / 2) / rect.height;
+            orbit.style.setProperty('--mx', `${dx * 8}px`);
+            orbit.style.setProperty('--my', `${dy * 8}px`);
+            orbit.style.marginLeft = `${dx * 8}px`;
+            orbit.style.marginTop = `${dy * 8}px`;
+          }
+        });
+        window.addEventListener('pointerleave', () => { glow.style.opacity = '0'; });
+      }
+
+      const loopStatus = document.querySelector('.loop-status');
+      document.querySelectorAll('.loop-item').forEach(item => {
+        item.addEventListener('click', () => {
+          document.querySelectorAll('.loop-item').forEach(other => {
+            const active = other === item;
+            other.classList.toggle('is-selected', active);
+            other.setAttribute('aria-pressed', String(active));
+          });
+          loopStatus.classList.remove('is-switching');
+          void loopStatus.offsetWidth;
+          loopStatus.classList.add('is-switching');
+          loopStatus.innerHTML = `<b>当前节点 / ${item.dataset.loopTitle}</b>　${item.dataset.loopText}`;
+        });
+      });
+
+      const signalDisplay = document.querySelector('.signal-display');
+      document.querySelectorAll('.signal').forEach(signal => {
+        signal.addEventListener('click', () => {
+          document.querySelectorAll('.signal').forEach(other => other.classList.toggle('is-active', other === signal));
+          signalDisplay.classList.remove('is-switching');
+          void signalDisplay.offsetWidth;
+          signalDisplay.classList.add('is-switching');
+          signalDisplay.innerHTML = `<b>${signal.dataset.signalTitle}</b>　${signal.dataset.signalCopy}`;
+        });
+      });
+
+      const cadenceDial = document.querySelector('.cadence-dial');
+      const cadenceReadout = document.querySelector('.cadence-readout');
+      const cadencePoints = [...document.querySelectorAll('.cadence-point')];
+      cadencePoints.forEach(point => point.setAttribute('aria-pressed', String(point.classList.contains('is-active'))));
+      let cadenceRotation = 0;
+      let cadenceAutoRotate = !reducedMotion;
+      let cadenceResumeTimer = null;
+      const resumeCadenceSoon = () => {
+        cadenceAutoRotate = false;
+        window.clearTimeout(cadenceResumeTimer);
+        cadenceResumeTimer = window.setTimeout(() => { cadenceAutoRotate = !reducedMotion; }, 1500);
+      };
+      const selectCadence = point => {
+        const index = cadencePoints.indexOf(point);
+        if (index < 0 || !cadenceReadout) return;
+        cadencePoints.forEach(other => {
+          const active = other === point;
+          other.classList.toggle('is-active', active);
+          other.setAttribute('aria-pressed', String(active));
+        });
+        cadenceReadout.classList.remove('is-switching');
+        void cadenceReadout.offsetWidth;
+        cadenceReadout.classList.add('is-switching');
+        cadenceReadout.querySelector('h3').textContent = point.dataset.cadenceTitle;
+        cadenceReadout.querySelector('p').textContent = point.dataset.cadenceCopy;
+        cadenceReadout.querySelectorAll('.cadence-meter i').forEach((bar, barIndex) => bar.classList.toggle('is-on', barIndex <= index));
+      };
+      cadenceDial?.addEventListener('click', event => {
+        const point = event.target.closest('.cadence-point');
+        if (!point) return;
+        event.stopPropagation();
+        selectCadence(point);
+        resumeCadenceSoon();
+      });
+      let cadenceFrameTime = performance.now();
+      const cadenceTick = now => {
+        const delta = Math.min(40, now - cadenceFrameTime);
+        cadenceFrameTime = now;
+        if (cadenceAutoRotate && cadenceDial) {
+          cadenceDial.classList.add('auto-spin');
+          cadenceRotation += delta * .006;
+          cadenceDial.style.setProperty('--cadence-rotation', `${cadenceRotation}deg`);
+        }
+        window.requestAnimationFrame(cadenceTick);
+      };
+      window.requestAnimationFrame(cadenceTick);
+
+      const methodStage = document.querySelector('#methodStage');
+      const methodNodes = [...document.querySelectorAll('.method-node')];
+      const methodPanel = document.querySelector('.method-panel');
+      let methodIndex = 0;
+      let methodRotation = 0;
+      let methodDragging = false;
+      let methodDragStartX = 0;
+      let methodDragStartRotation = 0;
+      let methodAutoRotate = !reducedMotion;
+      let methodResumeTimer = null;
+      const pauseMethod = () => {
+        methodAutoRotate = false;
+        window.clearTimeout(methodResumeTimer);
+        methodResumeTimer = window.setTimeout(() => { methodAutoRotate = !reducedMotion; }, 1500);
+      };
+      const updateMethod = (index, rotateToNode = true) => {
+        if (!methodStage || !methodPanel || !methodNodes.length) return;
+        methodIndex = (index + methodNodes.length) % methodNodes.length;
+        const node = methodNodes[methodIndex];
+        methodNodes.forEach((item, itemIndex) => {
+          const active = itemIndex === methodIndex;
+          item.classList.toggle('is-active', active);
+          item.setAttribute('aria-pressed', String(active));
+        });
+        if (rotateToNode) methodStage.style.setProperty('--method-rotation', `${methodRotation}deg`);
+        methodPanel.classList.remove('is-switching');
+        void methodPanel.offsetWidth;
+        methodPanel.classList.add('is-switching');
+        methodPanel.querySelector('.method-index').textContent = `STEP ${node.dataset.index} / ${node.dataset.index === '01' ? 'INPUT' : 'LOOP'}`;
+        methodPanel.querySelector('h3').textContent = node.dataset.title;
+        methodPanel.querySelector('p').textContent = node.dataset.copy;
+        methodPanel.querySelectorAll('.method-progress i').forEach((bar, barIndex) => bar.classList.toggle('is-on', barIndex <= methodIndex));
+      };
+      const rotateMethod = amount => {
+        methodRotation += amount;
+        methodStage.style.setProperty('--method-rotation', `${methodRotation}deg`);
+        let closest = 0;
+        let distance = Infinity;
+        methodNodes.forEach((node, index) => {
+          const angle = (Number.parseFloat(node.style.getPropertyValue('--angle')) || 0) + methodRotation;
+          const normalized = Math.abs(((angle + 180) % 360) - 180);
+          if (normalized < distance) { distance = normalized; closest = index; }
+        });
+        updateMethod(closest, false);
+      };
+      if (methodStage) {
+        methodNodes.forEach((node, index) => node.addEventListener('click', event => { event.stopPropagation(); pauseMethod(); updateMethod(index); }));
+        document.querySelectorAll('[data-method-rotate]').forEach(control => control.addEventListener('click', () => { pauseMethod(); rotateMethod(Number(control.dataset.methodRotate)); }));
+        methodStage.addEventListener('pointerdown', event => {
+          if (event.target.closest('.method-node')) return;
+          pauseMethod();
+          methodDragging = true;
+          methodDragStartX = event.clientX;
+          methodDragStartRotation = methodRotation;
+          methodStage.classList.add('is-dragging');
+          methodStage.setPointerCapture(event.pointerId);
+        });
+        methodStage.addEventListener('pointermove', event => {
+          if (!methodDragging) return;
+          methodRotation = methodDragStartRotation + (event.clientX - methodDragStartX) * .6;
+          methodStage.style.setProperty('--method-rotation', `${methodRotation}deg`);
+        });
+        const stopMethodDrag = event => {
+          if (!methodDragging) return;
+          methodDragging = false;
+          methodStage.classList.remove('is-dragging');
+          if (event?.pointerId && methodStage.hasPointerCapture?.(event.pointerId)) methodStage.releasePointerCapture?.(event.pointerId);
+          let closest = 0;
+          let distance = Infinity;
+          methodNodes.forEach((node, index) => {
+            const angle = (Number.parseFloat(node.style.getPropertyValue('--angle')) || 0) + methodRotation;
+            const normalized = Math.abs(((angle + 180) % 360) - 180);
+            if (normalized < distance) { distance = normalized; closest = index; }
+          });
+          updateMethod(closest, false);
+        };
+        methodStage.addEventListener('pointerup', stopMethodDrag);
+        methodStage.addEventListener('pointercancel', stopMethodDrag);
+        methodStage.addEventListener('lostpointercapture', stopMethodDrag);
+        updateMethod(0);
+        let methodFrameTime = performance.now();
+        const methodTick = now => {
+          const delta = Math.min(40, now - methodFrameTime);
+          methodFrameTime = now;
+          if (methodAutoRotate && !methodDragging) {
+            methodStage.style.setProperty('--method-rotation', `${methodRotation += delta * .009}deg`);
+          }
+          window.requestAnimationFrame(methodTick);
+        };
+        window.requestAnimationFrame(methodTick);
+      }
+
+      const fitReadout = document.querySelector('.fit-readout');
+      const fitConstellation = document.querySelector('.fit-constellation');
+      const fitNodes = [...document.querySelectorAll('.fit-node')];
+      fitNodes.forEach(node => node.setAttribute('aria-pressed', String(node.classList.contains('is-active'))));
+      fitConstellation?.addEventListener('click', event => {
+        const node = event.target.closest('.fit-node');
+        if (!node || !fitReadout) return;
+        event.stopPropagation();
+        const index = fitNodes.indexOf(node);
+        fitNodes.forEach(other => {
+          const active = other === node;
+          other.classList.toggle('is-active', active);
+          other.setAttribute('aria-pressed', String(active));
+        });
+        fitReadout.classList.remove('is-switching');
+        void fitReadout.offsetWidth;
+        fitReadout.classList.add('is-switching');
+        fitReadout.querySelector('h3').textContent = node.dataset.fitTitle;
+        fitReadout.querySelector('p').textContent = node.dataset.fitCopy;
+        fitReadout.querySelectorAll('.fit-meter i').forEach((bar, barIndex) => bar.classList.toggle('is-on', barIndex <= index));
+      });
+
+      const toggleStage = stage => {
+        const open = stage.classList.toggle('is-open');
+        stage.setAttribute('aria-expanded', String(open));
+      };
+      document.querySelectorAll('.stage').forEach(stage => {
+        stage.addEventListener('click', event => {
+          if (event.target.closest('a')) return;
+          toggleStage(stage);
+        });
+        stage.addEventListener('keydown', event => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            toggleStage(stage);
+          }
+        });
+      });
+
+      const orbitStage = document.querySelector('#orbitStage');
+      const orbitNodes = [...document.querySelectorAll('.orbit-node-btn')];
+      const consolePanel = document.querySelector('.console-panel');
+      let selectedIndex = 0;
+      let orbitRotation = 0;
+      let dragging = false;
+      let dragStartX = 0;
+      let dragStartRotation = 0;
+      let orbitAutoRotate = !reducedMotion;
+      let orbitResumeTimer = null;
+      let orbitFrameTime = performance.now();
+
+      const pauseOrbitTemporarily = () => {
+        orbitAutoRotate = false;
+        window.clearTimeout(orbitResumeTimer);
+        orbitResumeTimer = window.setTimeout(() => { orbitAutoRotate = !reducedMotion; }, 1500);
+      };
+
+      const updateOrbit = (index, rotateToNode = true) => {
+        selectedIndex = (index + orbitNodes.length) % orbitNodes.length;
+        const node = orbitNodes[selectedIndex];
+        orbitNodes.forEach((item, itemIndex) => {
+          const active = itemIndex === selectedIndex;
+          item.classList.toggle('is-active', active);
+          item.setAttribute('aria-pressed', String(active));
+        });
+        if (rotateToNode) orbitStage.style.setProperty('--rotation', `${orbitRotation}deg`);
+        consolePanel.classList.remove('is-switching');
+        void consolePanel.offsetWidth;
+        consolePanel.classList.add('is-switching');
+        consolePanel.querySelector('.console-index').textContent = `MODULE ${node.dataset.index} / ${node.dataset.index === '01' ? 'CORE' : 'PATH'}`;
+        consolePanel.querySelector('h3').textContent = node.dataset.title;
+        consolePanel.querySelector('p').textContent = node.dataset.copy;
+        consolePanel.querySelector('.console-meta span:last-child').textContent = `${node.dataset.index} / 09`;
+      };
+
+      const rotateBy = amount => {
+        orbitRotation += amount;
+        orbitStage.style.setProperty('--rotation', `${orbitRotation}deg`);
+        let closest = 0;
+        let distance = Infinity;
+        orbitNodes.forEach((node, index) => {
+          const angle = (Number.parseFloat(node.style.getPropertyValue('--angle')) || 0) + orbitRotation;
+          const normalized = Math.abs(((angle + 180) % 360) - 180);
+          if (normalized < distance) { distance = normalized; closest = index; }
+        });
+        updateOrbit(closest, false);
+      };
+
+      orbitNodes.forEach((node, index) => node.addEventListener('click', event => {
+        event.stopPropagation();
+        /* Selecting a module changes the console only; the spatial layer keeps breathing. */
+        updateOrbit(index);
+      }));
+      document.querySelectorAll('[data-rotate]').forEach(control => control.addEventListener('click', () => { pauseOrbitTemporarily(); rotateBy(Number(control.dataset.rotate)); }));
+      orbitStage.addEventListener('pointerdown', event => {
+        if (event.target.closest('.orbit-node-btn')) return;
+        pauseOrbitTemporarily();
+        dragging = true;
+        dragStartX = event.clientX;
+        dragStartRotation = orbitRotation;
+        orbitStage.classList.add('is-dragging');
+        orbitStage.setPointerCapture(event.pointerId);
+      });
+      orbitStage.addEventListener('pointermove', event => {
+        if (!dragging) return;
+        orbitRotation = dragStartRotation + (event.clientX - dragStartX) * .55;
+        orbitStage.style.setProperty('--rotation', `${orbitRotation}deg`);
+      });
+      const stopDrag = event => {
+        if (!dragging) return;
+        dragging = false;
+        orbitStage.classList.remove('is-dragging');
+        if (event.pointerId) orbitStage.releasePointerCapture?.(event.pointerId);
+        let closest = 0;
+        let distance = Infinity;
+        orbitNodes.forEach((node, index) => {
+          const angle = (Number.parseFloat(node.style.getPropertyValue('--angle')) || 0) + orbitRotation;
+          const normalized = Math.abs(((angle + 180) % 360) - 180);
+          if (normalized < distance) { distance = normalized; closest = index; }
+        });
+        updateOrbit(closest, false);
+      };
+      orbitStage.addEventListener('pointerup', stopDrag);
+      orbitStage.addEventListener('pointercancel', stopDrag);
+      orbitStage.addEventListener('lostpointercapture', stopDrag);
+      updateOrbit(0);
+      const orbitTick = now => {
+        const delta = Math.min(40, now - orbitFrameTime);
+        orbitFrameTime = now;
+        if (orbitAutoRotate && !dragging) {
+          orbitStage.classList.add('auto-spin');
+          orbitRotation += delta * .012;
+          orbitStage.style.setProperty('--rotation', `${orbitRotation}deg`);
+        } else {
+          orbitStage.classList.remove('auto-spin');
+        }
+        window.requestAnimationFrame(orbitTick);
+      };
+      window.requestAnimationFrame(orbitTick);
+    })();
+  </script>
+</body>
+</html>
